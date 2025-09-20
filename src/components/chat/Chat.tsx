@@ -1,11 +1,11 @@
 "use client";
 
+import { useChatStore } from "@/store/chat";
+import { Message } from "@/types/chat";
 import { useEffect, useRef, useState } from "react";
 
-type Message = { id: string; role: "user" | "assistant"; content: string };
-
 export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const { messages, addMessage, updateMessage } = useChatStore();
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
@@ -28,7 +28,9 @@ export default function Chat() {
       role: "assistant",
       content: "",
     };
-    setMessages((messages) => [...messages, userMessage, assistantMessage]);
+
+    addMessage(userMessage);
+    addMessage(assistantMessage);
     setInput("");
     setIsSending(true);
 
@@ -41,13 +43,9 @@ export default function Chat() {
     });
 
     if (!res.ok || !res.body) {
-      setMessages((messages) =>
-        messages.map((m) =>
-          m.id === assistantMessage.id
-            ? { ...m, content: "Error: failed to stream" }
-            : m
-        )
-      );
+      updateMessage(assistantMessage.id, {
+        content: "Error: Unable to get response.",
+      });
       setIsSending(false);
       return;
     }
@@ -58,11 +56,7 @@ export default function Chat() {
       const { done, value } = await reader.read();
       if (done) break;
       accumulator += decoder.decode(value, { stream: true });
-      setMessages((messages) =>
-        messages.map((m) =>
-          m.id === assistantMessage.id ? { ...m, content: accumulator } : m
-        )
-      );
+      updateMessage(assistantMessage.id, { content: accumulator });
     }
     setIsSending(false);
   };
