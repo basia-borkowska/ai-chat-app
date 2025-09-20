@@ -3,3 +3,9 @@ export type Message = {
   role: "user" | "assistant";
   content: string;
 };
+
+export type SelectedFile = {
+  id: string;
+  file: File;
+  url?: string;
+};
