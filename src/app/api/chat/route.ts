@@ -3,15 +3,16 @@ import { filesToParts, UserContent } from "@/lib/server/parts";
 import { streamText } from "ai";
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 export async function POST(req: Request) {
   const formData = await req.formData();
-
   const prompt = (formData.get("prompt") as string) || "";
   const files = formData
     .getAll("files")
     .filter((file) => file instanceof File) as File[];
 
-  const { parts: fileParts, unsupported } = await filesToParts(files);
+  const { parts: fileParts, unsupported, notes } = await filesToParts(files);
 
   const parts: UserContent = [];
   if (prompt) parts.push({ type: "text", text: prompt });
@@ -39,6 +40,10 @@ export async function POST(req: Request) {
       type: "text",
       text: `⚠️ Note: The following files were ignored because they are not supported: ${list}.`,
     });
+  }
+
+  for (const note of notes) {
+    parts.push({ type: "text", text: `Note: ${note}` });
   }
 
   const result = streamText({

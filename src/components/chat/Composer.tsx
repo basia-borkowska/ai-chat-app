@@ -1,13 +1,14 @@
 "use client";
 
 import { useRef } from "react";
-import type { SelectedFile, SupportedMime } from "@/types/chat";
+import type { SelectedFile } from "@/types/chat";
 import {
   SUPPORTED_MIME,
-  IMAGE_MIME,
   MAX_FILE_SIZE_BYTES,
+  IMAGE_MIME,
+  SupportedMime,
   MAX_TOTAL_SIZE_BYTES,
-} from "@/types/chat";
+} from "@/config/uploads";
 
 type Props = {
   value: string;
