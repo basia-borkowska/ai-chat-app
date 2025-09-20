@@ -1,8 +1,13 @@
 "use client";
 
 import { useRef } from "react";
-import type { SelectedFile } from "@/types/chat";
-import { SUPPORTED_IMAGE_MIME } from "@/types/chat";
+import type { SelectedFile, SupportedMime } from "@/types/chat";
+import {
+  SUPPORTED_MIME,
+  IMAGE_MIME,
+  MAX_FILE_SIZE_BYTES,
+  MAX_TOTAL_SIZE_BYTES,
+} from "@/types/chat";
 
 type Props = {
   value: string;
@@ -31,22 +36,52 @@ export default function Composer({
 
     const accepted: SelectedFile[] = [];
     const skipped: string[] = [];
+    const reasons: string[] = [];
+
+    const currentTotal = files.reduce((sum, { file }) => sum + file.size, 0);
+    const newTotal = currentTotal;
 
     for (const file of selected) {
-      if (
-        !SUPPORTED_IMAGE_MIME.includes(
-          file.type as (typeof SUPPORTED_IMAGE_MIME)[number]
-        )
-      ) {
+      const type = file.type as SupportedMime;
+      if (!SUPPORTED_MIME.includes(type as SupportedMime)) {
         skipped.push(file.name);
+        reasons.push(`Unsupported type: ${file.type || "unknown"}`);
         continue;
       }
-      const url = URL.createObjectURL(file);
-      accepted.push({ id: crypto.randomUUID(), file, url });
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        skipped.push(file.name);
+        reasons.push(
+          `Too large (> ${(MAX_FILE_SIZE_BYTES / 1024 / 1024).toFixed(0)}MB)`
+        );
+        continue;
+      }
+      if (newTotal + file.size > MAX_TOTAL_SIZE_BYTES) {
+        skipped.push(file.name);
+        reasons.push(
+          `Total size would exceed ${(
+            MAX_TOTAL_SIZE_BYTES /
+            1024 /
+            1024
+          ).toFixed(0)}MB`
+        );
+        continue;
+      }
+      const isImage = IMAGE_MIME.includes(type as (typeof IMAGE_MIME)[number]);
+      accepted.push({
+        id: crypto.randomUUID(),
+        file,
+        url: isImage ? URL.createObjectURL(file) : undefined,
+      });
     }
+
     if (skipped.length) {
-      alert(`Unsupported, skipped files: ${skipped.join(", ")}`);
+      alert(
+        `Some files were skipped:\n- ${skipped.join(
+          "\n- "
+        )}\n\nReasons (first few):\n${reasons.slice(0, 3).join("\n")}`
+      );
     }
+
     setFiles((prev) => [...prev, ...accepted]);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -69,7 +104,7 @@ export default function Composer({
           multiple
           onChange={onSelectFiles}
           className="hidden"
-          accept={SUPPORTED_IMAGE_MIME.join(",")}
+          accept={SUPPORTED_MIME.join(",")}
         />
         <button
           type="button"
@@ -97,7 +132,8 @@ export default function Composer({
         </button>
       </div>
       <p className="text-xs text-gray-500">
-        Supported: PNG, JPEG, WebP, GIF, SVG.
+        Images (PNG/JPEG/WebP/GIF/SVG) and text files (TXT/MD/CSV/JSON) up to
+        5MB each, 15MB total.
       </p>
     </form>
   );

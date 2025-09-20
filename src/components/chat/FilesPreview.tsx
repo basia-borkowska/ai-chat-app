@@ -24,8 +24,16 @@ export default function FilesPreview({ files, onRemove }: Props) {
               height={80}
             />
           ) : (
-            <span className="text-xs">{f.file.name}</span>
+            <div className="grid place-items-center h-16 w-16 rounded bg-gray-100 text-xs text-gray-600">
+              FILE
+            </div>
           )}
+          <div className="max-w-[240px] text-xs">
+            <div className="truncate font-medium">{f.file.name}</div>
+            <div className="text-gray-500">
+              {(f.file.size / 1024).toFixed(0)} KB • {f.file.type || "unknown"}
+            </div>
+          </div>
           <button
             type="button"
             onClick={() => onRemove(f.id)}
