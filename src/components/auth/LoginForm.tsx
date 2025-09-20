@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { is } from "zod/locales";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -19,7 +18,6 @@ export default function LoginForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError,
   } = useForm<LoginInput>({
     resolver: zodResolver(LoginSchema),
     mode: "onSubmit",
