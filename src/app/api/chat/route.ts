@@ -1,11 +1,11 @@
-import { createOpenAI } from "@ai-sdk/openai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { streamText } from "ai";
 import { NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-const openai = createOpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+const google = createGoogleGenerativeAI({
+  apiKey: process.env.GOOGLE_API_KEY,
 });
 
 type ChatRequest = { prompt?: string };
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   }
 
   const result = streamText({
-    model: openai("gpt-4o-mini"),
+    model: google("gemini-1.5-flash"),
     prompt,
   });
 
