@@ -11,6 +11,8 @@ import {
   MAX_TOTAL_SIZE_BYTES,
 } from "@/config/uploads";
 import { Textarea } from "@/components/ui/atoms/Field";
+import { SendHorizontal } from "lucide-react";
+import { IconButton } from "@/components/ui/atoms/IconButton";
 
 type Props = {
   value: string;
@@ -123,14 +125,15 @@ export default function Composer({
           onChange={(e) => setValue(e.target.value)}
           rows={4}
         />
-        <Button
+        <IconButton
           type="submit"
+          srLabel="Send message"
           disabled={
             isSending || (value.trim().length === 0 && files.length === 0)
           }
         >
-          Send
-        </Button>
+          <SendHorizontal />
+        </IconButton>
       </div>
       <p className="text-xs text-gray-500">
         Images (PNG/JPEG/WebP/GIF/SVG) and text files (TXT/MD/CSV/JSON) up to

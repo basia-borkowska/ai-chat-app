@@ -9,6 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { Button } from "@/components/ui/atoms/Button";
 import { Input } from "@/components/ui/atoms/Field";
+import { Trash2, Upload } from "lucide-react";
+import { IconButton } from "@/components/ui/atoms/IconButton";
 
 const ProfileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -131,19 +133,21 @@ export default function ProfileForm() {
             hidden
             onChange={onPickAvatar}
           />
-          <Button
+          <IconButton
             variant="secondary"
+            srLabel="Upload avatar"
             onClick={() => fileInputRef.current?.click()}
           >
-            Upload
-          </Button>
-          <Button
-            variant="outline"
+            <Upload />
+          </IconButton>
+          <IconButton
+            variant="ghost"
+            srLabel="Remove avatar"
             onClick={onRemoveAvatar}
             disabled={!avatarPreview}
           >
-            Remove
-          </Button>
+            <Trash2 />
+          </IconButton>
         </div>
       </div>
 
