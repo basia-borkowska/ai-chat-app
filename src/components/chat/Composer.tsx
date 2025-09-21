@@ -6,7 +6,6 @@ import { SUPPORTED_MIME } from "@/config/uploads";
 import { Textarea } from "@/components/ui/atoms/Field";
 import { Paperclip, SendHorizontal } from "lucide-react";
 import { IconButton } from "@/components/ui/atoms/IconButton";
-import { HelperText } from "@/components/ui/atoms/typography/HelperText";
 import { cn } from "@/lib/utils";
 import { MicButton } from "../ui/molecules/MicButton";
 import { useComposerFiles } from "@/hooks/useComposerFiles";
@@ -169,10 +168,6 @@ export default function Composer({
           <SendHorizontal />
         </IconButton>
       </div>
-      <HelperText>
-        Images (PNG/JPEG/WebP/GIF/SVG) and text files (TXT/MD/CSV/JSON) up to
-        5MB each, 15MB total.
-      </HelperText>
     </form>
   );
 }

@@ -1,7 +1,7 @@
 import Image, { ImageProps } from "next/image";
 import { cn } from "@/lib/utils";
 
-type AvatarVariant = "sm" | "lg";
+type AvatarVariant = "sm" | "lg" | "xl";
 
 export interface AvatarProps extends Omit<ImageProps, "width" | "height"> {
   variant?: AvatarVariant;
@@ -11,6 +11,7 @@ export interface AvatarProps extends Omit<ImageProps, "width" | "height"> {
 const sizeMap: Record<AvatarVariant, number> = {
   sm: 32,
   lg: 80,
+  xl: 250,
 };
 
 export function Avatar({

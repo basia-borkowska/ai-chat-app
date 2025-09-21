@@ -71,7 +71,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="grid h-[calc(100dvh-8rem)] grid-rows-[1fr_auto] gap-3">
+    <div className="flex flex-col gap-4 h-full">
       <Messages messages={messages} />
       {files.length > 0 && <FilesPreview files={files} onRemove={removeFile} />}
       <Composer

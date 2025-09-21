@@ -30,18 +30,22 @@ export default function MessageBubble({
       {!isUser && avatarUrl && (
         <Avatar src="/ai-avatar.png" alt="AI Assistant" />
       )}
-      <div
-        className={cn(
-          "max-w-[80%] rounded-lg px-3 py-2 text-sm",
-          {
-            "bg-dark text-light rounded-br-none": isUser,
-            "bg-light-muted text-dark rounded-bl-none": !isUser,
-          },
-          className
-        )}
-      >
-        <ReactMarkdown>{message}</ReactMarkdown>
-      </div>
+      {message.length === 0 ? (
+        <div className="h-4 w-4 rounded-full bg-light-muted animate-pulse" />
+      ) : (
+        <div
+          className={cn(
+            "max-w-[80%] rounded-lg px-3 py-2 text-sm",
+            {
+              "bg-accent-secondary text-dark rounded-br-none": isUser,
+              "bg-dark-secondary text-light rounded-bl-none": !isUser,
+            },
+            className
+          )}
+        >
+          <ReactMarkdown>{message}</ReactMarkdown>
+        </div>
+      )}
 
       {isUser && avatarUrl && <Avatar src={avatarUrl} alt="User Avatar" />}
     </div>

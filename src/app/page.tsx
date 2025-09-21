@@ -1,3 +1,6 @@
+import { PATHS } from "@/config/paths";
+import { redirect } from "next/navigation";
+
 export default function Home() {
-  return <div>Home Page</div>;
+  redirect(PATHS.chat);
 }

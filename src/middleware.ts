@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { PATHS } from "./config/paths";
 
 export function middleware(req: NextRequest) {
   const isLoggedIn = req.cookies.get("auth")?.value === "true";
@@ -7,16 +8,16 @@ export function middleware(req: NextRequest) {
 
   if (
     !isLoggedIn &&
-    (pathname.startsWith("/chat") || pathname.startsWith("/profile"))
+    (pathname.startsWith(PATHS.chat) || pathname.startsWith(PATHS.profile))
   ) {
     const url = req.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = PATHS.login;
     return NextResponse.redirect(url);
   }
 
-  if (isLoggedIn && pathname.startsWith("/login")) {
+  if (isLoggedIn && pathname.startsWith(PATHS.login)) {
     const url = req.nextUrl.clone();
-    url.pathname = "/chat";
+    url.pathname = PATHS.chat;
     return NextResponse.redirect(url);
   }
 
@@ -24,5 +25,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/login", "/chat", "/profile"],
+  matcher: [PATHS.root, PATHS.login, PATHS.chat, PATHS.profile],
 };

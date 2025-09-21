@@ -19,21 +19,21 @@
 
 :root {
   /* Base */
-  --dark: #0d0d12; /* midnight background */
-  --dark-secondary: #343a4f; /* card/panel surface */
-  --light: #e5e7eb; /* main text on dark */
-  --light-muted: #a1a8c1; /* secondary text */
+  --dark: #000000; /* background */
+  --dark-secondary: #202020; /* card/panel surface */
+  --light: #ffffff; /* main text on dark */
+  --light-muted: #808080; /* secondary text */
 
   /* Accent & Actions */
-  --accent: #ff2e88; /* neon magenta (primary action) */
-  --accent-secondary: #18c3cc; /* cyan glow (secondary action) */
-  --accent-highlight: #ffc73b; /* warm highlight (alerts, success) */
+  --accent: #49c5ef; /* (primary action) */
+  --accent-secondary: #ffdea5; /*  glow (secondary action) */
+  --accent-highlight: #9c1b1b; /* warm highlight (alerts, success) */
   --radius: 0.625rem;
 }
 
 @layer base {
   body {
-    @apply bg-dark-secondary text-light;
+    @apply bg-dark text-light;
   }
 }
 /* Firefox */

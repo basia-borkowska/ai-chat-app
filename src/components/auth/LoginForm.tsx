@@ -7,6 +7,7 @@ import z from "zod";
 import { Button } from "@/components/ui/atoms/Button";
 import { Input } from "@/components/ui/atoms/Field";
 import { HelperText } from "../ui/atoms/typography/HelperText";
+import { PATHS } from "@/config/paths";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -42,7 +43,7 @@ export default function LoginForm() {
         setServerError(message);
         return;
       }
-      window.location.href = "/chat";
+      window.location.href = PATHS.chat;
     } catch (error) {
       setServerError(error instanceof Error ? error.message : String(error));
     }
@@ -69,13 +70,9 @@ export default function LoginForm() {
       {serverError && (
         <HelperText className="text-accent-highlight">{serverError}</HelperText>
       )}
-      <Button disabled={isSubmitting}>
-        {isSubmitting ? "Signing in..." : "Sign In"}
+      <Button loading={isSubmitting} disabled={isSubmitting}>
+        Sign in
       </Button>
-      <HelperText>
-        Helper for testing: use <code>test@example.com</code> /{" "}
-        <code>password123</code>
-      </HelperText>
     </form>
   );
 }

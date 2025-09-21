@@ -8,8 +8,6 @@ export function Paragraph({
   className?: string;
 }) {
   return (
-    <p className={cn("text-base text-light-muted leading-relaxed", className)}>
-      {children}
-    </p>
+    <p className={cn("text-base leading-relaxed", className)}>{children}</p>
   );
 }

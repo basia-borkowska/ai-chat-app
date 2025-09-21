@@ -8,10 +8,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/atoms/Button";
 import { Input } from "@/components/ui/atoms/Field";
-import { Trash2, Upload, User } from "lucide-react";
+import { Trash2, Upload } from "lucide-react";
 import { IconButton } from "@/components/ui/atoms/IconButton";
-import { Avatar } from "@/components/ui/atoms/Avatar";
 import { Title } from "@/components/ui/atoms/typography/Title";
+import { AvatarEdit } from "../ui/molecules/AvatarEdit";
 
 const ProfileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -29,7 +29,7 @@ function fileToDataUrl(file: File): Promise<string> {
   });
 }
 
-export default function ProfileForm() {
+export default function ProfileForm({ onClose }: { onClose: () => void }) {
   const {
     profile: { name, email, avatarUrl },
     setProfile,
@@ -70,9 +70,10 @@ export default function ProfileForm() {
         resetForm(data);
       } finally {
         setSaving(false);
+        onClose();
       }
     },
-    [avatarPreview, resetForm, setProfile]
+    [avatarPreview, resetForm, setProfile, onClose]
   );
 
   const onPickAvatar = useCallback(
@@ -112,13 +113,10 @@ export default function ProfileForm() {
       <Title>Your Profile</Title>
 
       <div className="flex items-center gap-4">
-        {avatarPreview ? (
-          <Avatar src={avatarPreview} alt={name || "User"} variant="lg" />
-        ) : (
-          <div className="size-20 rounded-full flex items-center justify-center bg-light-muted text-dark-secondary">
-            <User />
-          </div>
-        )}
+        <AvatarEdit
+          avatarPreview={avatarPreview}
+          onEdit={() => fileInputRef.current?.click()}
+        />
 
         <div className="flex gap-2">
           <input
@@ -128,21 +126,23 @@ export default function ProfileForm() {
             hidden
             onChange={onPickAvatar}
           />
-          <IconButton
-            variant="secondary"
-            srLabel="Upload avatar"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <Upload />
-          </IconButton>
-          <IconButton
-            variant="ghost"
-            srLabel="Remove avatar"
-            onClick={onRemoveAvatar}
-            disabled={!avatarPreview}
-          >
-            <Trash2 />
-          </IconButton>
+          {avatarPreview ? (
+            <IconButton
+              variant="ghost"
+              srLabel="Remove avatar"
+              onClick={onRemoveAvatar}
+            >
+              <Trash2 />
+            </IconButton>
+          ) : (
+            <IconButton
+              variant="secondary"
+              srLabel="Upload avatar"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload />
+            </IconButton>
+          )}
         </div>
       </div>
 
@@ -152,13 +152,20 @@ export default function ProfileForm() {
         error={errors.email?.message}
         {...register("email")}
       />
-
-      <Button
-        type="submit"
-        disabled={saving || (!isDirty && avatarPreview === (avatarUrl ?? null))}
-      >
-        {saving ? "Saving…" : "Save changes"}
-      </Button>
+      <div className="ml-auto flex gap-2">
+        <Button onClick={onClose} variant="ghost" disabled={saving}>
+          Close
+        </Button>
+        <Button
+          type="submit"
+          loading={saving}
+          disabled={
+            saving || (!isDirty && avatarPreview === (avatarUrl ?? null))
+          }
+        >
+          Save changes
+        </Button>
+      </div>
     </form>
   );
 }

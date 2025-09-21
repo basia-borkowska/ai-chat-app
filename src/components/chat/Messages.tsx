@@ -1,33 +1,47 @@
 "use client";
 
 import type { Message } from "@/types/chat";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import MessageBubble from "@/components/ui/molecules/MessageBubble";
 import { useProfileStore } from "@/store/profile";
 
 type Props = { messages: Message[] };
 
 export default function Messages({ messages }: Props) {
-  const endRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const [autoScroll, setAutoScroll] = useState(true);
   const { profile } = useProfileStore();
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length]);
+    if (autoScroll) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, autoScroll]);
+
+  const handleScroll = () => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const atBottom = el.scrollHeight - el.scrollTop <= el.clientHeight + 50; // 50px tolerance
+    setAutoScroll(atBottom);
+  };
 
   return (
-    <div className="overflow-auto m-6  p-4">
-      <div className="space-y-4">
-        {messages.map(({ id, role, content }) => (
-          <MessageBubble
-            key={id}
-            role={role}
-            message={content}
-            avatarUrl={profile.avatarUrl}
-          />
-        ))}
-        <div ref={endRef} />
-      </div>
+    <div
+      ref={containerRef}
+      onScroll={handleScroll}
+      className="flex-1 overflow-y-auto bg-dark px-4 py-2 space-y-4"
+    >
+      {messages.map(({ id, content, role }) => (
+        <MessageBubble
+          key={id}
+          message={content}
+          role={role}
+          avatarUrl={profile.avatarUrl}
+        />
+      ))}
+      <div ref={bottomRef} />
     </div>
   );
 }
