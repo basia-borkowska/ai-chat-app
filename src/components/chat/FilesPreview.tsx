@@ -2,7 +2,7 @@
 
 import type { SelectedFile } from "@/types/chat";
 import Image from "next/image";
-
+import { Button } from "@/components/ui/atoms/Button";
 type Props = {
   files: SelectedFile[];
   onRemove: (id: string) => void;
@@ -34,14 +34,15 @@ export default function FilesPreview({ files, onRemove }: Props) {
               {(f.file.size / 1024).toFixed(0)} KB • {f.file.type || "unknown"}
             </div>
           </div>
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => onRemove(f.id)}
-            className="absolute right-1 top-1 rounded bg-black/70 px-1 text-xs text-white"
             aria-label={`Remove ${f.file.name}`}
+            className="absolute right-1 top-1"
           >
             ×
-          </button>
+          </Button>
         </div>
       ))}
     </div>

@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import { Button } from "@/components/ui/atoms/Button";
+import { Input } from "@/components/ui/atoms/Field";
 
 const ProfileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -99,7 +101,7 @@ export default function ProfileForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto grid w-full max-w-xl gap-4"
+      className="mx-auto grid w-full max-w-xl gap-6"
       aria-busy={saving}
     >
       <h1 className="text-2xl font-semibold">Your Profile</h1>
@@ -129,62 +131,35 @@ export default function ProfileForm() {
             hidden
             onChange={onPickAvatar}
           />
-          <button
-            type="button"
+          <Button
+            variant="secondary"
             onClick={() => fileInputRef.current?.click()}
-            className="h-9 rounded-md border px-3"
           >
             Upload
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="outline"
             onClick={onRemoveAvatar}
             disabled={!avatarPreview}
-            className="h-9 rounded-md border px-3 disabled:opacity-50"
           >
             Remove
-          </button>
+          </Button>
         </div>
       </div>
 
-      <label className="grid gap-1 text-sm">
-        <span>Name</span>
-        <input
-          className="h-10 rounded-md border px-3 outline-none focus:ring"
-          {...register("name")}
-        />
-        {errors.name && (
-          <span className="text-xs text-red-600">{errors.name.message}</span>
-        )}
-      </label>
+      <Input label="Name" error={errors.name?.message} {...register("name")} />
+      <Input
+        label="Email"
+        error={errors.email?.message}
+        {...register("email")}
+      />
 
-      <label className="grid gap-1 text-sm">
-        <span>Email</span>
-        <input
-          type="email"
-          className="h-10 rounded-md border px-3 outline-none focus:ring"
-          {...register("email")}
-        />
-        {errors.email && (
-          <span className="text-xs text-red-600">{errors.email.message}</span>
-        )}
-      </label>
-
-      <div className="flex gap-2">
-        <button
-          type="submit"
-          disabled={
-            saving || (!isDirty && avatarPreview === (avatarUrl ?? null))
-          }
-          className="h-10 rounded-md bg-black px-4 text-white disabled:opacity-50"
-        >
-          {saving ? "Saving…" : "Save changes"}
-        </button>
-      </div>
-
-      <p className="text-xs text-gray-500">
-        Profile is stored locally in your browser (no server sync).
-      </p>
+      <Button
+        type="submit"
+        disabled={saving || (!isDirty && avatarPreview === (avatarUrl ?? null))}
+      >
+        {saving ? "Saving…" : "Save changes"}
+      </Button>
     </form>
   );
 }

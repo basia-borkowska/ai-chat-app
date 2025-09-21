@@ -1,12 +1,38 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme inline {
+  --color-dark: var(--dark);
+  --color-dark-secondary: var(--dark-secondary);
+  --color-light: var(--light);
+  --color-light-muted: var(--light-muted);
+  --color-accent: var(--accent);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-highlight: var(--accent-highlight);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --text-xs: 10px;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root {
+  /* Base */
+  --dark: #0d0d12; /* midnight background */
+  --dark-secondary: #343a4f; /* card/panel surface */
+  --light: #e5e7eb; /* main text on dark */
+  --light-muted: #a1a8c1; /* secondary text */
+
+  /* Accent & Actions */
+  --accent: #ff2e88; /* neon magenta (primary action) */
+  --accent-secondary: #18c3cc; /* cyan glow (secondary action) */
+  --accent-highlight: #ffc73b; /* warm highlight (alerts, success) */
+  --radius: 0.625rem;
+}
+
+@layer base {
+  body {
+    @apply bg-dark-secondary text-light;
+  }
 }

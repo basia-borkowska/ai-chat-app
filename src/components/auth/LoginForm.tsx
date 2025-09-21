@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { Button } from "@/components/ui/atoms/Button";
+import { Input } from "@/components/ui/atoms/Field";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -46,38 +48,29 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3">
-      <label className="grid gap-1 text-sm">
-        <span>Email</span>
-        <input
-          type="email"
-          className="h-10 rounded-md border px-3 outline-none focus:ring"
-          placeholder="you@example.com"
-          {...register("email")}
-        />
-        {errors.email && (
-          <span className="text-xs text-red-600">{errors.email.message}</span>
-        )}
-      </label>
-      <label className="grid gap-1 text-sm">
-        <span>Password</span>
-        <input
-          type="password"
-          placeholder="******"
-          className="h-10 rounded-md border px-3 outline-none focus:ring"
-          {...register("password")}
-        />
-        {errors.password && (
-          <span className="text-xs text-red-600">
-            {errors.password.message}
-          </span>
-        )}
-      </label>
+    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
+      <Input
+        label="Email"
+        type="email"
+        placeholder="email@example.com"
+        {...register("email")}
+        error={errors.email?.message}
+      />
 
-      {serverError && <p className="text-sm text-red-600">{serverError}</p>}
-      <button className="h-9 rounded-md border px-3" disabled={isSubmitting}>
+      <Input
+        label="Password"
+        type="password"
+        placeholder="********"
+        {...register("password")}
+        error={errors.password?.message}
+      />
+
+      {serverError && (
+        <p className="text-sm text-accent-highlight">{serverError}</p>
+      )}
+      <Button disabled={isSubmitting}>
         {isSubmitting ? "Signing in..." : "Sign In"}
-      </button>
+      </Button>
       <p className="text-xs text-gray-500">
         Helper for testing: use <code>test@example.com</code> /{" "}
         <code>password123</code>

@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import type { SelectedFile } from "@/types/chat";
+import { Button } from "@/components/ui/atoms/Button";
 import {
   SUPPORTED_MIME,
   MAX_FILE_SIZE_BYTES,
@@ -9,6 +10,7 @@ import {
   SupportedMime,
   MAX_TOTAL_SIZE_BYTES,
 } from "@/config/uploads";
+import { Textarea } from "@/components/ui/atoms/Field";
 
 type Props = {
   value: string;
@@ -95,7 +97,7 @@ export default function Composer({
         e.preventDefault();
         onSubmit();
       }}
-      className="grid gap-2"
+      className="grid gap-2 mx-6"
     >
       <div className="flex gap-2">
         <input
@@ -107,30 +109,28 @@ export default function Composer({
           className="hidden"
           accept={SUPPORTED_MIME.join(",")}
         />
-        <button
-          type="button"
+        <Button
+          variant="secondary"
           onClick={() => fileInputRef.current?.click()}
-          className="h-12 rounded-md border px-3"
         >
           Attach
-        </button>
+        </Button>
 
-        <textarea
-          className="min-h-12 flex-1 rounded-md border px-3 py-2 outline-none focus:ring"
+        <Textarea
+          label="Message"
           placeholder="Ask something…"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          rows={2}
+          rows={4}
         />
-        <button
+        <Button
           type="submit"
           disabled={
             isSending || (value.trim().length === 0 && files.length === 0)
           }
-          className="h-12 rounded-md bg-black px-4 text-white disabled:opacity-50"
         >
           Send
-        </button>
+        </Button>
       </div>
       <p className="text-xs text-gray-500">
         Images (PNG/JPEG/WebP/GIF/SVG) and text files (TXT/MD/CSV/JSON) up to

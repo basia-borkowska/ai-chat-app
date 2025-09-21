@@ -13,7 +13,7 @@ export default function Messages({ messages }: Props) {
   }, [messages.length]);
 
   return (
-    <div className="overflow-auto rounded-xl border p-4">
+    <div className="overflow-auto m-6 border p-4">
       <div className="space-y-4">
         {messages.map((m) => (
           <div
@@ -23,7 +23,7 @@ export default function Messages({ messages }: Props) {
             <div
               className={[
                 "inline-block max-w-[75%] whitespace-pre-wrap break-words rounded-2xl px-3 py-2 align-top",
-                m.role === "user" ? "bg-black text-white" : "bg-gray-100",
+                m.role === "user" ? "bg-dark text-light" : "bg-light text-dark",
               ].join(" ")}
             >
               {m.content}
