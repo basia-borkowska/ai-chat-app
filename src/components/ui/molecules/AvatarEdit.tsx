@@ -1,9 +1,10 @@
+import React from "react";
 import { Avatar } from "../atoms/Avatar";
 import { Edit2, User } from "lucide-react";
 
 export interface AvatarEditProps {
   avatarPreview?: string | null;
-  onEdit: () => void;
+  onEdit: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export function AvatarEdit({ avatarPreview, onEdit }: AvatarEditProps) {

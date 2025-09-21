@@ -7,15 +7,18 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/atoms/Button";
-import { Input } from "@/components/ui/atoms/Field";
+import { Input, Textarea } from "@/components/ui/atoms/Field";
 import { Trash2, Upload } from "lucide-react";
 import { IconButton } from "@/components/ui/atoms/IconButton";
 import { Title } from "@/components/ui/atoms/typography/Title";
 import { AvatarEdit } from "../ui/molecules/AvatarEdit";
+import { BadgesInput } from "../ui/molecules/BadgesInput";
 
 const ProfileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email"),
+  bio: z.string().max(2500, "Bio must be at most 2500 characters").optional(),
+  skills: z.array(z.string()).optional(),
 });
 
 type ProfileInput = z.infer<typeof ProfileSchema>;
@@ -31,7 +34,7 @@ function fileToDataUrl(file: File): Promise<string> {
 
 export default function ProfileForm({ onClose }: { onClose: () => void }) {
   const {
-    profile: { name, email, avatarUrl },
+    profile: { name, email, avatarUrl, bio, skills },
     setProfile,
     hasHydrated,
   } = useProfileStore();
@@ -39,23 +42,29 @@ export default function ProfileForm({ onClose }: { onClose: () => void }) {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(
     avatarUrl ?? null
   );
+  const [skillsValue, setSkillsValue] = useState<string[]>(skills || []);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isDirty },
     reset: resetForm,
   } = useForm<ProfileInput>({
     resolver: zodResolver(ProfileSchema),
-    defaultValues: { name: "", email: "" },
+    defaultValues: hasHydrated
+      ? { name, email, bio, skills }
+      : { name: "", email: "" },
   });
 
   useEffect(() => {
-    if (!hasHydrated) return;
-    resetForm({ name, email });
-    setAvatarPreview(avatarUrl ?? null);
-  }, [hasHydrated, name, email, avatarUrl, resetForm]);
+    if (hasHydrated) {
+      resetForm({ name, email, bio, skills });
+      setAvatarPreview(avatarUrl ?? null);
+      setSkillsValue(skills || []);
+    }
+  }, [hasHydrated, name, email, bio, skills, avatarUrl, resetForm]);
 
   const onSubmit = useCallback(
     async (data: ProfileInput) => {
@@ -64,6 +73,8 @@ export default function ProfileForm({ onClose }: { onClose: () => void }) {
         const newProfile: Partial<UserProfile> = {
           name: data.name,
           email: data.email,
+          bio: data.bio,
+          skills: data.skills,
           avatarUrl: avatarPreview,
         };
         setProfile(newProfile);
@@ -107,7 +118,7 @@ export default function ProfileForm({ onClose }: { onClose: () => void }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto grid w-full max-w-xl gap-6"
+      className="mx-auto grid w-full max-w-7xl gap-6"
       aria-busy={saving}
     >
       <Title>Your Profile</Title>
@@ -115,7 +126,10 @@ export default function ProfileForm({ onClose }: { onClose: () => void }) {
       <div className="flex items-center gap-4">
         <AvatarEdit
           avatarPreview={avatarPreview}
-          onEdit={() => fileInputRef.current?.click()}
+          onEdit={(e) => {
+            e.preventDefault();
+            fileInputRef.current?.click();
+          }}
         />
 
         <div className="flex gap-2">
@@ -130,7 +144,10 @@ export default function ProfileForm({ onClose }: { onClose: () => void }) {
             <IconButton
               variant="ghost"
               srLabel="Remove avatar"
-              onClick={onRemoveAvatar}
+              onClick={(e) => {
+                e.preventDefault();
+                onRemoveAvatar();
+              }}
             >
               <Trash2 />
             </IconButton>
@@ -138,7 +155,10 @@ export default function ProfileForm({ onClose }: { onClose: () => void }) {
             <IconButton
               variant="secondary"
               srLabel="Upload avatar"
-              onClick={() => fileInputRef.current?.click()}
+              onClick={(e) => {
+                e.preventDefault();
+                fileInputRef.current?.click();
+              }}
             >
               <Upload />
             </IconButton>
@@ -152,6 +172,28 @@ export default function ProfileForm({ onClose }: { onClose: () => void }) {
         error={errors.email?.message}
         {...register("email")}
       />
+
+      <BadgesInput
+        label="Skills"
+        placeholder="Type and press Enter"
+        value={skillsValue}
+        onChange={(newSkills) => {
+          setSkillsValue(newSkills);
+          setValue("skills", newSkills, { shouldDirty: true });
+        }}
+        name="skills"
+        register={register("skills")}
+        serialize={(items) => JSON.stringify(items)}
+      />
+
+      <Textarea
+        label="Bio"
+        placeholder="Tell us something about yourself..."
+        error={errors.bio?.message}
+        {...register("bio")}
+        rows={10}
+      />
+
       <div className="ml-auto flex gap-2">
         <Button onClick={onClose} variant="ghost" disabled={saving}>
           Close
