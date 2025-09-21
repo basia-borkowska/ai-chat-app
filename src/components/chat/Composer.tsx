@@ -119,7 +119,10 @@ export default function Composer({
         />
         <Button
           variant="secondary"
-          onClick={() => fileInputRef.current?.click()}
+          onClick={(e) => {
+            e.preventDefault();
+            fileInputRef.current?.click();
+          }}
         >
           Attach
         </Button>
