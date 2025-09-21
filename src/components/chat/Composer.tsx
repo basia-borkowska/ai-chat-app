@@ -13,6 +13,7 @@ import {
 import { Textarea } from "@/components/ui/atoms/Field";
 import { SendHorizontal } from "lucide-react";
 import { IconButton } from "@/components/ui/atoms/IconButton";
+import { HelperText } from "@/components/ui/atoms/typography/HelperText";
 
 type Props = {
   isSending: boolean;
@@ -146,10 +147,10 @@ export default function Composer({
           <SendHorizontal />
         </IconButton>
       </div>
-      <p className="text-xs text-gray-500">
+      <HelperText>
         Images (PNG/JPEG/WebP/GIF/SVG) and text files (TXT/MD/CSV/JSON) up to
         5MB each, 15MB total.
-      </p>
+      </HelperText>
     </form>
   );
 }

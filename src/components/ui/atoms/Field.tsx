@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { Label } from "./typography/Label";
+import { Paragraph } from "./typography/Paragraph";
 
 type ElementTag = "input" | "textarea";
 
@@ -68,16 +70,16 @@ function InnerField<T extends ElementTag = "input">(
           ),
         })}
 
-        <label
+        <Label
           htmlFor={fieldId}
           className={cn(
-            "absolute -top-[6px] left-2 bg-dark-secondary px-1 text-xs uppercase transition-colors",
+            "absolute -top-[6px] left-2 bg-dark-secondary px-1  transition-colors",
             { "text-accent-highlight": error },
             { "text-light-muted peer-focus:text-accent": !error }
           )}
         >
           {label}
-        </label>
+        </Label>
       </div>
       {error && (
         <p

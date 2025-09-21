@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { Button } from "@/components/ui/atoms/Button";
 import { Input } from "@/components/ui/atoms/Field";
+import { HelperText } from "../ui/atoms/typography/HelperText";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -66,15 +67,15 @@ export default function LoginForm() {
       />
 
       {serverError && (
-        <p className="text-sm text-accent-highlight">{serverError}</p>
+        <HelperText className="text-accent-highlight">{serverError}</HelperText>
       )}
       <Button disabled={isSubmitting}>
         {isSubmitting ? "Signing in..." : "Sign In"}
       </Button>
-      <p className="text-xs text-gray-500">
+      <HelperText>
         Helper for testing: use <code>test@example.com</code> /{" "}
         <code>password123</code>
-      </p>
+      </HelperText>
     </form>
   );
 }

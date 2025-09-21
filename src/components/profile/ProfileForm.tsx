@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/atoms/Field";
 import { Trash2, Upload, User } from "lucide-react";
 import { IconButton } from "@/components/ui/atoms/IconButton";
 import { Avatar } from "@/components/ui/atoms/Avatar";
+import { Title } from "@/components/ui/atoms/typography/Title";
 
 const ProfileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -108,7 +109,7 @@ export default function ProfileForm() {
       className="mx-auto grid w-full max-w-xl gap-6"
       aria-busy={saving}
     >
-      <h1 className="text-2xl font-semibold">Your Profile</h1>
+      <Title>Your Profile</Title>
 
       <div className="flex items-center gap-4">
         {avatarPreview ? (
