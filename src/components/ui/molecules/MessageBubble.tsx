@@ -2,10 +2,11 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { MessageRole } from "@/types/chat";
 import { Avatar } from "../atoms/Avatar";
+import ReactMarkdown from "react-markdown";
 
 export interface MessageBubbleProps {
   role: MessageRole;
-  message: React.ReactNode;
+  message: string;
   avatarUrl?: string | null;
   className?: string;
 }
@@ -39,7 +40,7 @@ export default function MessageBubble({
           className
         )}
       >
-        {message}
+        <ReactMarkdown>{message}</ReactMarkdown>
       </div>
 
       {isUser && avatarUrl && <Avatar src={avatarUrl} alt="User Avatar" />}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { SelectedFile } from "@/types/chat";
 import { Button } from "@/components/ui/atoms/Button";
 import {
@@ -15,24 +15,19 @@ import { SendHorizontal } from "lucide-react";
 import { IconButton } from "@/components/ui/atoms/IconButton";
 
 type Props = {
-  value: string;
-  setValue: (v: string) => void;
   isSending: boolean;
-  onSubmit: () => void;
+  onSubmit: (message: string) => void;
   files: SelectedFile[];
-  setFiles: (
-    files: SelectedFile[] | ((prev: SelectedFile[]) => SelectedFile[])
-  ) => void;
+  setFiles: React.Dispatch<React.SetStateAction<SelectedFile[]>>;
 };
 
 export default function Composer({
-  value,
-  setValue,
   isSending,
   onSubmit,
   files,
   setFiles,
 }: Props) {
+  const [value, setValue] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const onSelectFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,16 +38,17 @@ export default function Composer({
     const skipped: string[] = [];
     const reasons: string[] = [];
 
-    const currentTotal = files.reduce((sum, { file }) => sum + file.size, 0);
-    const newTotal = currentTotal;
+    let currentTotal = files.reduce((sum, { file }) => sum + file.size, 0);
 
     for (const file of selected) {
       const type = file.type as SupportedMime;
+
       if (!SUPPORTED_MIME.includes(type as SupportedMime)) {
         skipped.push(file.name);
         reasons.push(`Unsupported type: ${file.type || "unknown"}`);
         continue;
       }
+
       if (file.size > MAX_FILE_SIZE_BYTES) {
         skipped.push(file.name);
         reasons.push(
@@ -60,7 +56,8 @@ export default function Composer({
         );
         continue;
       }
-      if (newTotal + file.size > MAX_TOTAL_SIZE_BYTES) {
+
+      if (currentTotal + file.size > MAX_TOTAL_SIZE_BYTES) {
         skipped.push(file.name);
         reasons.push(
           `Total size would exceed ${(
@@ -71,6 +68,9 @@ export default function Composer({
         );
         continue;
       }
+
+      currentTotal += file.size;
+
       const isImage = IMAGE_MIME.includes(type as (typeof IMAGE_MIME)[number]);
       accepted.push({
         id: crypto.randomUUID(),
@@ -93,14 +93,19 @@ export default function Composer({
     }
   };
 
+  const handleSubmit = useCallback(
+    (e?: React.FormEvent) => {
+      e?.preventDefault();
+      const message = value.trim();
+      if (!message && files.length === 0) return;
+      onSubmit(message);
+      setValue("");
+    },
+    [onSubmit, value, files.length]
+  );
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-      }}
-      className="grid gap-2 mx-6"
-    >
+    <form onSubmit={handleSubmit} className="grid gap-2 mx-6">
       <div className="flex gap-2">
         <input
           ref={fileInputRef}
@@ -123,6 +128,12 @@ export default function Composer({
           placeholder="Ask something…"
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
           rows={4}
         />
         <IconButton

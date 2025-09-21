@@ -9,7 +9,6 @@ import Composer from "./Composer";
 
 export default function Chat() {
   const { messages, addMessage, updateMessage } = useChatStore();
-  const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [files, setFiles] = useState<SelectedFile[]>([]);
 
@@ -25,10 +24,7 @@ export default function Chat() {
     });
   };
 
-  const send = async () => {
-    const prompt = input.trim();
-    if (!prompt && files.length === 0) return;
-
+  const send = async (prompt: string) => {
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: "user",
@@ -42,7 +38,6 @@ export default function Chat() {
 
     addMessage(userMessage);
     addMessage(assistantMessage);
-    setInput("");
     setIsSending(true);
 
     const formData = new FormData();
@@ -80,8 +75,6 @@ export default function Chat() {
       <Messages messages={messages} />
       {files.length > 0 && <FilesPreview files={files} onRemove={removeFile} />}
       <Composer
-        value={input}
-        setValue={setInput}
         isSending={isSending}
         onSubmit={send}
         files={files}
