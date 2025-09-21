@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { SelectedFile } from "@/types/chat";
 import { Button } from "@/components/ui/atoms/Button";
 import {
@@ -11,7 +11,7 @@ import {
   MAX_TOTAL_SIZE_BYTES,
 } from "@/config/uploads";
 import { Textarea } from "@/components/ui/atoms/Field";
-import { SendHorizontal } from "lucide-react";
+import { Paperclip, SendHorizontal, Upload } from "lucide-react";
 import { IconButton } from "@/components/ui/atoms/IconButton";
 import { HelperText } from "@/components/ui/atoms/typography/HelperText";
 import { cn } from "@/lib/utils";
@@ -32,6 +32,14 @@ export default function Composer({
   const [value, setValue] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (!textareaRef.current) return;
+    const el = textareaRef.current;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [value]);
 
   const processFiles = useCallback(
     (incoming: File[]) => {
@@ -151,7 +159,7 @@ export default function Composer({
   );
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-2 mx-6">
+    <form onSubmit={handleSubmit} className="grid gap-2">
       <div className="flex gap-2">
         <input
           ref={fileInputRef}
@@ -162,30 +170,33 @@ export default function Composer({
           className="hidden"
           accept={SUPPORTED_MIME.join(",")}
         />
-        <Button
-          variant="secondary"
-          onClick={(e) => {
-            e.preventDefault();
-            fileInputRef.current?.click();
-          }}
-        >
-          Attach
-        </Button>
 
         <div className="relative flex-grow">
           <Textarea
+            ref={textareaRef}
             label="Message"
             placeholder="Ask something…"
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={onKeyDown}
-            className={dragAndDropClass}
+            className={cn("!pb-10", dragAndDropClass)}
             onDragOver={onDragOver}
             onDragEnter={onDragEnter}
             onDragLeave={onDragLeave}
             onDrop={onDrop}
-            rows={4}
+            rows={3}
           />
+          <IconButton
+            variant="ghost"
+            srLabel="Attach files"
+            className="absolute bottom-2 left-2 size-8"
+            onClick={(e) => {
+              e.preventDefault();
+              fileInputRef.current?.click();
+            }}
+          >
+            <Paperclip />
+          </IconButton>
           {isDragging && (
             <div className="pointer-events-none absolute inset-0 grid place-items-center rounded-md bg-dark/40">
               <div className="rounded-md border border-dashed border-accent bg-dark/60 px-6 py-3 text-sm text-light">
