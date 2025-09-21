@@ -6,11 +6,11 @@ import type { UserProfile } from "@/types/profile";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import { Button } from "@/components/ui/atoms/Button";
 import { Input } from "@/components/ui/atoms/Field";
-import { Trash2, Upload } from "lucide-react";
+import { Trash2, Upload, User } from "lucide-react";
 import { IconButton } from "@/components/ui/atoms/IconButton";
+import { Avatar } from "@/components/ui/atoms/Avatar";
 
 const ProfileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -35,7 +35,9 @@ export default function ProfileForm() {
     hasHydrated,
   } = useProfileStore();
   const [saving, setSaving] = useState(false);
-  const [avatarPreview, setAvatarPreview] = useState(avatarUrl ?? null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(
+    avatarUrl ?? null
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -109,21 +111,13 @@ export default function ProfileForm() {
       <h1 className="text-2xl font-semibold">Your Profile</h1>
 
       <div className="flex items-center gap-4">
-        <div className="h-20 w-20 overflow-hidden rounded-full border bg-gray-50">
-          {avatarPreview ? (
-            <Image
-              src={avatarPreview}
-              alt="Avatar preview"
-              className="object-cover"
-              width={80}
-              height={80}
-            />
-          ) : (
-            <div className="grid h-full w-full place-items-center text-xs text-gray-500">
-              No photo
-            </div>
-          )}
-        </div>
+        {avatarPreview ? (
+          <Avatar src={avatarPreview} alt={name || "User"} variant="lg" />
+        ) : (
+          <div className="size-20 rounded-full flex items-center justify-center bg-light-muted text-dark-secondary">
+            <User />
+          </div>
+        )}
 
         <div className="flex gap-2">
           <input

@@ -1,8 +1,8 @@
-export type Role = "user" | "assistant";
+export type MessageRole = "user" | "assistant";
 
 export type Message = {
   id: string;
-  role: Role;
+  role: MessageRole;
   content: string;
 };
 
