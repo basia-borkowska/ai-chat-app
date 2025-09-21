@@ -73,7 +73,7 @@ function InnerField<T extends ElementTag = "input">(
         <Label
           htmlFor={fieldId}
           className={cn(
-            "absolute -top-[6px] left-2 bg-dark-secondary px-1  transition-colors",
+            "absolute -top-[6px] left-2 bg-dark-secondary px-1 transition-colors",
             { "text-accent-highlight": error },
             { "text-light-muted peer-focus:text-accent": !error }
           )}

@@ -2,6 +2,7 @@
 
 import type { SelectedFile } from "@/types/chat";
 import { FilePreview } from "@/components/ui/molecules/FilePreview";
+import { getFileExtension } from "@/lib/files";
 type Props = {
   files: SelectedFile[];
   onRemove: (id: string) => void;
@@ -9,11 +10,6 @@ type Props = {
 
 export default function FilesPreview({ files, onRemove }: Props) {
   if (files.length === 0) return null;
-
-  function getFileExtension(file: File): string {
-    const parts = file.name.split(".");
-    return parts.length > 1 ? parts.pop()!.toLowerCase() : "";
-  }
 
   return (
     <div className="flex flex-wrap gap-2">
