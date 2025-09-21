@@ -2,19 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { SelectedFile } from "@/types/chat";
-import {
-  SUPPORTED_MIME,
-  MAX_FILE_SIZE_BYTES,
-  IMAGE_MIME,
-  SupportedMime,
-  MAX_TOTAL_SIZE_BYTES,
-} from "@/config/uploads";
+import { SUPPORTED_MIME } from "@/config/uploads";
 import { Textarea } from "@/components/ui/atoms/Field";
 import { Paperclip, SendHorizontal } from "lucide-react";
 import { IconButton } from "@/components/ui/atoms/IconButton";
 import { HelperText } from "@/components/ui/atoms/typography/HelperText";
 import { cn } from "@/lib/utils";
 import { MicButton } from "../ui/molecules/MicButton";
+import { useComposerFiles } from "@/hooks/useComposerFiles";
+import { useAutoResizeTextarea } from "@/hooks/useAutoResizeTextarea";
 
 type Props = {
   isSending: boolean;
@@ -32,8 +28,14 @@ export default function Composer({
   const [value, setValue] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [shadowValue, setShadowValue] = useState<string>("");
+  const { processFiles } = useComposerFiles(files, setFiles);
+  const { ref: textareaRef, resize } =
+    useAutoResizeTextarea<HTMLTextAreaElement>();
+
+  useEffect(() => {
+    resize();
+  }, [value, resize]);
 
   function applyTranscript(text: string, kind: "final" | "interim") {
     if (kind === "interim") {
@@ -48,77 +50,6 @@ export default function Composer({
       return `${prev}${sep}${text}`;
     });
   }
-
-  useEffect(() => {
-    if (!textareaRef.current) return;
-    const el = textareaRef.current;
-    el.style.height = "auto";
-    el.style.height = `${el.scrollHeight}px`;
-  }, [value]);
-
-  const processFiles = useCallback(
-    (incoming: File[]) => {
-      if (!incoming.length) return;
-
-      const accepted: SelectedFile[] = [];
-      const skipped: string[] = [];
-      const reasons: string[] = [];
-
-      let currentTotal = files.reduce((sum, { file }) => sum + file.size, 0);
-
-      for (const file of incoming) {
-        const type = file.type as SupportedMime;
-
-        if (!SUPPORTED_MIME.includes(type as SupportedMime)) {
-          skipped.push(file.name);
-          reasons.push(`Unsupported type: ${file.type || "unknown"}`);
-          continue;
-        }
-
-        if (file.size > MAX_FILE_SIZE_BYTES) {
-          skipped.push(file.name);
-          reasons.push(
-            `Too large (> ${(MAX_FILE_SIZE_BYTES / 1024 / 1024).toFixed(0)}MB)`
-          );
-          continue;
-        }
-
-        if (currentTotal + file.size > MAX_TOTAL_SIZE_BYTES) {
-          skipped.push(file.name);
-          reasons.push(
-            `Total size would exceed ${(
-              MAX_TOTAL_SIZE_BYTES /
-              1024 /
-              1024
-            ).toFixed(0)}MB`
-          );
-          continue;
-        }
-
-        currentTotal += file.size;
-
-        const isImage = IMAGE_MIME.includes(
-          type as (typeof IMAGE_MIME)[number]
-        );
-        accepted.push({
-          id: crypto.randomUUID(),
-          file,
-          url: isImage ? URL.createObjectURL(file) : undefined,
-        });
-      }
-
-      if (skipped.length) {
-        alert(
-          `Some files were skipped:\n- ${skipped.join(
-            "\n- "
-          )}\n\nReasons (first few):\n${reasons.slice(0, 3).join("\n")}`
-        );
-      }
-
-      if (accepted.length) setFiles((prev) => [...prev, ...accepted]);
-    },
-    [files, setFiles]
-  );
 
   const onSelectFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(e.target.files ?? []);
