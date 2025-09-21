@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { SelectedFile } from "@/types/chat";
-import { Button } from "@/components/ui/atoms/Button";
 import {
   SUPPORTED_MIME,
   MAX_FILE_SIZE_BYTES,
@@ -11,10 +10,11 @@ import {
   MAX_TOTAL_SIZE_BYTES,
 } from "@/config/uploads";
 import { Textarea } from "@/components/ui/atoms/Field";
-import { Paperclip, SendHorizontal, Upload } from "lucide-react";
+import { Paperclip, SendHorizontal } from "lucide-react";
 import { IconButton } from "@/components/ui/atoms/IconButton";
 import { HelperText } from "@/components/ui/atoms/typography/HelperText";
 import { cn } from "@/lib/utils";
+import { MicButton } from "../ui/molecules/MicButton";
 
 type Props = {
   isSending: boolean;
@@ -33,6 +33,21 @@ export default function Composer({
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [shadowValue, setShadowValue] = useState<string>("");
+
+  function applyTranscript(text: string, kind: "final" | "interim") {
+    if (kind === "interim") {
+      setShadowValue(text);
+      return;
+    }
+
+    setShadowValue("");
+    setValue((prev) => {
+      if (!prev) return text;
+      const sep = prev.endsWith(" ") ? "" : " ";
+      return `${prev}${sep}${text}`;
+    });
+  }
 
   useEffect(() => {
     if (!textareaRef.current) return;
@@ -176,8 +191,11 @@ export default function Composer({
             ref={textareaRef}
             label="Message"
             placeholder="Ask something…"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
+            value={value + (shadowValue ? ` ${shadowValue}` : "")}
+            onChange={(e) => {
+              setShadowValue("");
+              setValue(e.currentTarget.value);
+            }}
             onKeyDown={onKeyDown}
             className={cn("!pb-10", dragAndDropClass)}
             onDragOver={onDragOver}
@@ -186,17 +204,21 @@ export default function Composer({
             onDrop={onDrop}
             rows={3}
           />
-          <IconButton
-            variant="ghost"
-            srLabel="Attach files"
-            className="absolute bottom-2 left-2 size-8"
-            onClick={(e) => {
-              e.preventDefault();
-              fileInputRef.current?.click();
-            }}
-          >
-            <Paperclip />
-          </IconButton>
+          <div className="absolute bottom-2 left-2 flex items-center gap-1">
+            <IconButton
+              variant="ghost"
+              srLabel="Attach files"
+              className=" size-8"
+              onClick={(e) => {
+                e.preventDefault();
+                fileInputRef.current?.click();
+              }}
+            >
+              <Paperclip />
+            </IconButton>
+            <MicButton onTranscript={applyTranscript} />
+          </div>
+
           {isDragging && (
             <div className="pointer-events-none absolute inset-0 grid place-items-center rounded-md bg-dark/40">
               <div className="rounded-md border border-dashed border-accent bg-dark/60 px-6 py-3 text-sm text-light">

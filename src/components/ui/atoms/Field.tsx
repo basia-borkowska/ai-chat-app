@@ -3,7 +3,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Label } from "./typography/Label";
-import { Paragraph } from "./typography/Paragraph";
 
 type ElementTag = "input" | "textarea";
 
