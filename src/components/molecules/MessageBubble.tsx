@@ -1,10 +1,11 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { MessageRole } from "@/types/chat";
-import { Avatar } from "../atoms/Avatar";
+import { Avatar } from "@/components/atoms/Avatar";
 import ReactMarkdown from "react-markdown";
 
 export interface MessageBubbleProps {
+  id?: string;
   role: MessageRole;
   message: string;
   avatarUrl?: string | null;
@@ -12,6 +13,7 @@ export interface MessageBubbleProps {
 }
 
 export default function MessageBubble({
+  id,
   role,
   message,
   avatarUrl,
@@ -21,6 +23,7 @@ export default function MessageBubble({
 
   return (
     <div
+      id={id}
       className={cn(
         "flex w-full gap-2 items-end",
         { "justify-end": isUser, "justify-start": !isUser },

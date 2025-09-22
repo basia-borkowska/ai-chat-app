@@ -9,15 +9,15 @@ export default function ChatSkeleton() {
           <div
             key={i}
             className={cn(
-              "flex flex-col gap-2 rounded-lg p-3",
+              "flex flex-col w-full max-w-3/4 gap-2 rounded-lg p-3",
               i % 2 === 0
                 ? "self-start bg-dark-secondary"
                 : "self-end bg-accent-secondary/20"
             )}
           >
-            <Skeleton className="h-3 w-52" />
-            <Skeleton className="h-3 w-80" />
-            {i % 2 === 0 && <Skeleton className="h-3 w-64" />}
+            <Skeleton className="h-3 w-1/4" />
+            <Skeleton className="h-3 w-1/2" />
+            {i % 2 === 0 && <Skeleton className="h-3 w-3/4" />}
           </div>
         ))}
       </div>

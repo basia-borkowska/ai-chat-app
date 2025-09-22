@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar } from "../atoms/Avatar";
+import { Avatar } from "@/components/atoms/Avatar";
 import { Edit2, User } from "lucide-react";
 
 export interface AvatarEditProps {
