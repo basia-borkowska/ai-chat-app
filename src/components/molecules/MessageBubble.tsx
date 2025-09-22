@@ -35,7 +35,7 @@ export default function MessageBubble({
       ) : (
         <div
           className={cn(
-            "max-w-[80%] rounded-lg px-3 py-2 text-sm",
+            "max-w-[80%] rounded-lg px-3 py-2 text-md leading-relaxed",
             {
               "bg-accent-secondary text-dark rounded-br-none": isUser,
               "bg-dark-secondary text-light rounded-bl-none": !isUser,

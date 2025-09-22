@@ -9,7 +9,7 @@ export interface AvatarProps extends Omit<ImageProps, "width" | "height"> {
 }
 
 const sizeMap: Record<AvatarVariant, number> = {
-  sm: 32,
+  sm: 42,
   lg: 80,
   xl: 240,
 };

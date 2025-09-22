@@ -10,6 +10,7 @@ import { Paragraph } from "../atoms/typography/Paragraph";
 import { useState } from "react";
 import ProfileForm from "./ProfileForm";
 import { Badge } from "../atoms/Badge";
+import Image from "next/image";
 
 export default function ProfileDetails() {
   const {
@@ -21,7 +22,7 @@ export default function ProfileDetails() {
   if (!hasHydrated) return <Loader2 className="mx-auto animate-spin" />;
   if (editView) return <ProfileForm onClose={() => setEditView(false)} />;
   return (
-    <div className="mx-auto grid w-full max-w-7xl min-w-xl md:min-w-0 gap-6">
+    <div className="mx-auto relative grid w-full max-w-7xl min-w-xl md:min-w-0 gap-6">
       <div className="flex items-center gap-2">
         <Title>Your Profile</Title>
         <IconButton
