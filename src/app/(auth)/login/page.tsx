@@ -1,6 +1,6 @@
-import LoginForm from "@/components/auth/LoginForm";
-import { Subtitle } from "@/components/ui/atoms/typography/Subtitle";
-import { Title } from "@/components/ui/atoms/typography/Title";
+import LoginForm from "@/components/organisms/LoginForm";
+import { Subtitle } from "@/components/atoms/typography/Subtitle";
+import { Title } from "@/components/atoms/typography/Title";
 import Image from "next/image";
 
 export default function LoginPage() {

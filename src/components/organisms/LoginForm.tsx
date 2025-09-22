@@ -4,9 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { Button } from "@/components/ui/atoms/Button";
-import { Input } from "@/components/ui/atoms/Field";
-import { HelperText } from "../ui/atoms/typography/HelperText";
+import { Button } from "@/components/atoms/Button";
+import { Input } from "@/components/atoms/Field";
+import { HelperText } from "../atoms/typography/HelperText";
 import { PATHS } from "@/config/paths";
 
 const LoginSchema = z.object({

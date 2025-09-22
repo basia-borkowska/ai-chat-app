@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { SVGProps } from "react";
-import { Button, type ButtonProps } from "@/components/ui/atoms/Button";
+import { Button, type ButtonProps } from "@/components/atoms/Button";
 import { cn } from "@/lib/utils";
 
 type IconButtonProps = Omit<ButtonProps, "children"> & {

@@ -4,8 +4,8 @@ import { useChatStore } from "@/store/chat";
 import { Message, SelectedFile } from "@/types/chat";
 import { useEffect, useState } from "react";
 import Messages from "./Messages";
-import FilesPreview from "./FilesPreview";
-import Composer from "./Composer";
+import FilesPreview from "../molecules/FilesPreview";
+import Composer from "../molecules/Composer";
 
 export default function Chat() {
   const { messages, addMessage, updateMessage } = useChatStore();
@@ -71,7 +71,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col gap-4 h-full">
+    <div className="flex flex-col gap-4 h-full pb-4">
       <Messages messages={messages} />
       {files.length > 0 && <FilesPreview files={files} onRemove={removeFile} />}
       <Composer

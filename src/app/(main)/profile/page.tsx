@@ -1,4 +1,4 @@
-import ProfileDetails from "@/components/profile/ProfileDetails";
+import ProfileDetails from "@/components/organisms/ProfileDetails";
 
 export default function ProfilePage() {
   return (

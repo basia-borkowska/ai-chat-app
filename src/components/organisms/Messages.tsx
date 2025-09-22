@@ -2,7 +2,7 @@
 
 import type { Message } from "@/types/chat";
 import { useEffect, useRef, useState } from "react";
-import MessageBubble from "@/components/ui/molecules/MessageBubble";
+import MessageBubble from "@/components/molecules/MessageBubble";
 import { useProfileStore } from "@/store/profile";
 
 type Props = { messages: Message[] };

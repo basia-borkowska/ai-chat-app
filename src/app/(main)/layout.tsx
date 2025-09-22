@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Navbar } from "@/components/ui/molecules/Navbar";
+import { Navbar } from "@/components/molecules/Navbar";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (

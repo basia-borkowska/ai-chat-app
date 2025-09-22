@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { IconButton } from "@/components/ui/atoms/IconButton";
+import { IconButton } from "@/components/atoms/IconButton";
 import { Mic, Square } from "lucide-react";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 

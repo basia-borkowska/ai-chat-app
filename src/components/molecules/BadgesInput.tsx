@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Input } from "@/components/ui/atoms/Field";
-import { Badge } from "@/components/ui/atoms/Badge";
-import { IconButton } from "@/components/ui/atoms/IconButton";
+import { Input } from "@/components/atoms/Field";
+import { Badge } from "@/components/atoms/Badge";
+import { IconButton } from "@/components/atoms/IconButton";
 import { X } from "lucide-react";
 import type { UseFormRegisterReturn } from "react-hook-form";
 

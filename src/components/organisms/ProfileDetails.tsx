@@ -2,14 +2,14 @@
 
 import { useProfileStore } from "@/store/profile";
 import { Edit2, Loader2, User } from "lucide-react";
-import { IconButton } from "@/components/ui/atoms/IconButton";
-import { Title } from "@/components/ui/atoms/typography/Title";
-import { Avatar } from "@/components/ui/atoms/Avatar";
-import { Label } from "../ui/atoms/typography/Label";
-import { Paragraph } from "../ui/atoms/typography/Paragraph";
+import { IconButton } from "@/components/atoms/IconButton";
+import { Title } from "@/components/atoms/typography/Title";
+import { Avatar } from "@/components/atoms/Avatar";
+import { Label } from "../atoms/typography/Label";
+import { Paragraph } from "../atoms/typography/Paragraph";
 import { useState } from "react";
 import ProfileForm from "./ProfileForm";
-import { Badge } from "../ui/atoms/Badge";
+import { Badge } from "../atoms/Badge";
 
 export default function ProfileDetails() {
   const {

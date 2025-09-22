@@ -6,13 +6,13 @@ import type { UserProfile } from "@/types/profile";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/atoms/Button";
-import { Input, Textarea } from "@/components/ui/atoms/Field";
+import { Button } from "@/components/atoms/Button";
+import { Input, Textarea } from "@/components/atoms/Field";
 import { Trash2, Upload } from "lucide-react";
-import { IconButton } from "@/components/ui/atoms/IconButton";
-import { Title } from "@/components/ui/atoms/typography/Title";
-import { AvatarEdit } from "../ui/molecules/AvatarEdit";
-import { BadgesInput } from "../ui/molecules/BadgesInput";
+import { IconButton } from "@/components/atoms/IconButton";
+import { Title } from "@/components/atoms/typography/Title";
+import { AvatarEdit } from "../molecules/AvatarEdit";
+import { BadgesInput } from "../molecules/BadgesInput";
 
 const ProfileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),

@@ -1,7 +1,7 @@
 "use client";
 
 import type { SelectedFile } from "@/types/chat";
-import { FilePreview } from "@/components/ui/molecules/FilePreview";
+import { FilePreview } from "@/components/molecules/FilePreview";
 import { getFileExtension } from "@/lib/files";
 type Props = {
   files: SelectedFile[];

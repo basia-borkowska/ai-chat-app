@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { IconButton } from "@/components/ui/atoms/IconButton";
+import { IconButton } from "@/components/atoms/IconButton";
 import { MessageCircle, User, LogOut } from "lucide-react";
 import { logout } from "@/actions/auth";
 import Link from "next/link";

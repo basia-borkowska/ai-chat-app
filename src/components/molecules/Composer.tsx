@@ -3,11 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { SelectedFile } from "@/types/chat";
 import { SUPPORTED_MIME } from "@/config/uploads";
-import { Textarea } from "@/components/ui/atoms/Field";
+import { Textarea } from "@/components/atoms/Field";
 import { Paperclip, SendHorizontal } from "lucide-react";
-import { IconButton } from "@/components/ui/atoms/IconButton";
+import { IconButton } from "@/components/atoms/IconButton";
 import { cn } from "@/lib/utils";
-import { MicButton } from "../ui/molecules/MicButton";
+import { MicButton } from "./MicButton";
 import { useComposerFiles } from "@/hooks/useComposerFiles";
 import { useAutoResizeTextarea } from "@/hooks/useAutoResizeTextarea";
 
