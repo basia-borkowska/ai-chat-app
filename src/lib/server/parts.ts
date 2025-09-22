@@ -1,6 +1,12 @@
 import type { DocMime, ImageMime, TextlikeMime } from "@/config/uploads";
-import { DOC_MIME, IMAGE_MIME, TEXTLIKE_MIME } from "@/config/uploads";
+import {
+  DOC_MIME,
+  DOCX_MIME,
+  IMAGE_MIME,
+  TEXTLIKE_MIME,
+} from "@/config/uploads";
 import { extractPdfText } from "./pdf";
+import { docxToText } from "./docx";
 
 export type TextPart = { type: "text"; text: string };
 export type FilePart = { type: "file"; data: Uint8Array; mediaType: string };
@@ -16,6 +22,10 @@ export function isTextlike(type: string): type is TextlikeMime {
 
 export function isPdf(type: string): type is DocMime {
   return (DOC_MIME as readonly string[]).includes(type);
+}
+
+export function isDocx(type: string): type is DocMime {
+  return (DOCX_MIME as readonly string[]).includes(type);
 }
 
 export async function filesToParts(files: File[]): Promise<{
@@ -60,6 +70,13 @@ export async function filesToParts(files: File[]): Promise<{
           `PDF "${file.name}" was truncated to keep the prompt compact.`
         );
       }
+      continue;
+    }
+
+    if (isDocx(type)) {
+      const buf = await file.arrayBuffer();
+      const text = await docxToText(buf, file.name);
+      parts.push({ type: "text", text });
       continue;
     }
 

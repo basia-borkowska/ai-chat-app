@@ -13,18 +13,25 @@ export const TEXTLIKE_MIME = [
   "application/json",
 ] as const;
 
+export const DOCX_MIME = [
+  ".docx",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+] as const;
+
 export const DOC_MIME = ["application/pdf"] as const;
 
 export const SUPPORTED_MIME = [
   ...IMAGE_MIME,
   ...TEXTLIKE_MIME,
   ...DOC_MIME,
+  ...DOCX_MIME,
 ] as const;
 
 // Types
 export type ImageMime = (typeof IMAGE_MIME)[number];
 export type TextlikeMime = (typeof TEXTLIKE_MIME)[number];
 export type DocMime = (typeof DOC_MIME)[number];
+export type DocxMime = (typeof DOCX_MIME)[number];
 export type SupportedMime = (typeof SUPPORTED_MIME)[number];
 
 // Limits

@@ -37,7 +37,7 @@ export default function ProfileDetails() {
         {avatarUrl ? (
           <Avatar src={avatarUrl} alt="Avatar preview" variant="xl" />
         ) : (
-          <div className="size-20 rounded-full flex items-center justify-center bg-light-muted text-dark-secondary">
+          <div className="size-60 rounded-full flex items-center justify-center bg-light-muted text-dark-secondary">
             <User />
           </div>
         )}
@@ -67,7 +67,9 @@ export default function ProfileDetails() {
           {bio && (
             <div className="flex flex-col gap-1">
               <Label>Bio</Label>
-              <Paragraph>{bio}</Paragraph>
+              <Paragraph className="bg-dark-secondary p-4 rounded-xs">
+                {bio}
+              </Paragraph>
             </div>
           )}
         </div>
