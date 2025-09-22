@@ -38,3 +38,9 @@ Features:
 
 - User can display account details
 - User can edit all details (stored in local storage)
+
+### Env keys
+
+For chat feature to work, project needs local .env file with GOOGLE_API_KEY
+
+It can be generated on https://aistudio.google.com/
