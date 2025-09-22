@@ -11,8 +11,8 @@ import { Input, Textarea } from "@/components/atoms/Field";
 import { Trash2, Upload } from "lucide-react";
 import { IconButton } from "@/components/atoms/IconButton";
 import { Title } from "@/components/atoms/typography/Title";
-import { AvatarEdit } from "../molecules/AvatarEdit";
-import { BadgesInput } from "../molecules/BadgesInput";
+import { AvatarEdit } from "@/components/molecules/AvatarEdit";
+import { BadgesInput } from "@/components/molecules/BadgesInput";
 
 const ProfileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),

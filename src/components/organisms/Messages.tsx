@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import MessageBubble from "@/components/molecules/MessageBubble";
 import { useProfileStore } from "@/store/profile";
 import Image from "next/image";
-import { Subtitle } from "../atoms/typography/Subtitle";
+import { Subtitle } from "@/components/atoms/typography/Subtitle";
 
 type Props = { messages: Message[] };
 

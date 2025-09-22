@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { Button } from "@/components/atoms/Button";
 import { Input } from "@/components/atoms/Field";
-import { HelperText } from "../atoms/typography/HelperText";
+import { HelperText } from "@/components/atoms/typography/HelperText";
 import { PATHS } from "@/config/paths";
 
 const LoginSchema = z.object({

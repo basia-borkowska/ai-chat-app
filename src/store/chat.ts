@@ -7,6 +7,8 @@ type ChatState = {
   addMessage: (message: Message) => void;
   updateMessage: (id: string, partial: Partial<Message>) => void;
   reset: () => void;
+  hasHydrated: boolean;
+  setHasHydrated: (hasHydrated: boolean) => void;
 };
 
 export const useChatStore = create<ChatState>()(
@@ -22,10 +24,16 @@ export const useChatStore = create<ChatState>()(
           ),
         })),
       reset: () => set({ messages: [] }),
+      hasHydrated: false,
+      setHasHydrated: (hasHydrated) => set({ hasHydrated }),
     }),
     {
       name: "chat-storage",
       storage: createJSONStorage(() => sessionStorage),
+      onRehydrateStorage: () => (state, error) => {
+        state?.setHasHydrated(true);
+        if (error) console.error("An error occurred during hydration:", error);
+      },
     }
   )
 );

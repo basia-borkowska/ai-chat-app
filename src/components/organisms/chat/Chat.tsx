@@ -3,12 +3,13 @@
 import { useChatStore } from "@/store/chat";
 import { Message, SelectedFile } from "@/types/chat";
 import { useEffect, useState } from "react";
-import Messages from "./Messages";
-import FilesPreview from "../molecules/FilesPreview";
-import Composer from "../molecules/Composer";
+import Messages from "../Messages";
+import FilesPreview from "../../molecules/FilesPreview";
+import Composer from "../../molecules/Composer";
+import ChatSkeleton from "./ChatSkeleton";
 
 export default function Chat() {
-  const { messages, addMessage, updateMessage } = useChatStore();
+  const { messages, addMessage, updateMessage, hasHydrated } = useChatStore();
   const [isSending, setIsSending] = useState(false);
   const [files, setFiles] = useState<SelectedFile[]>([]);
 
@@ -69,6 +70,8 @@ export default function Chat() {
     }
     setIsSending(false);
   };
+
+  if (!hasHydrated) return <ChatSkeleton />;
 
   return (
     <div className="flex flex-col gap-4 h-full pb-4">
